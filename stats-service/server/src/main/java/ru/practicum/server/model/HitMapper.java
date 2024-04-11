@@ -3,8 +3,13 @@ package ru.practicum.server.model;
 import lombok.experimental.UtilityClass;
 import ru.practicum.dto.HitDto;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @UtilityClass
 public class HitMapper {
+
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static HitDto toHitDto(Hit hit) {
 
@@ -13,7 +18,7 @@ public class HitMapper {
                 .app(hit.getApp())
                 .uri(hit.getUri())
                 .ip(hit.getIp())
-                .timestamp(hit.getTimestamp())
+                .timestamp(hit.getTimestamp().toString())
                 .build();
     }
 
@@ -24,7 +29,7 @@ public class HitMapper {
                 .app(hitDto.getApp())
                 .uri(hitDto.getUri())
                 .ip(hitDto.getIp())
-                .timestamp(hitDto.getTimestamp())
+                .timestamp(LocalDateTime.parse(hitDto.getTimestamp(), DATE_FORMATTER))
                 .build();
     }
 

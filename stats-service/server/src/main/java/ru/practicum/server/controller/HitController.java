@@ -10,15 +10,15 @@ import ru.practicum.server.service.HitService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import static ru.practicum.server.model.HitMapper.DATE_FORMATTER;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class HitController {
 
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String HIT_PREFIX = "/hit";
     private static final String STATS_PREFIX = "/stats";
 

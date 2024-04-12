@@ -21,5 +21,4 @@ public class UserDto {
     @NotEmpty(message = "email cannot consist only of spaces")
     private String email;
 
-
 }

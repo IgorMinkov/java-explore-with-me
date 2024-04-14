@@ -18,27 +18,21 @@ import static ru.practicum.mainservice.event.model.event.EventMapper.DATE_FORMAT
 @Builder
 public class EventUpdateDto {
 
-    @NotBlank(message = "annotation cannot consist only of spaces")
     @Size(min = 20, max = 2000)
     private String annotation;
 
-    @NotNull(message = "category cannot be null")
     private Long category;
 
-    @NotBlank(message = "title cannot consist only of spaces")
     @Size(min = 3, max = 120)
     private String title;
 
-    @NotBlank(message = "description cannot consist only of spaces")
     @Size(min = 20, max = 7000)
     private String description;
 
-    @NotNull
     @FutureOrPresent(message = "event date must be today or in the future")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
     private LocalDateTime eventDate;
 
-    @NotNull(message = "location cannot be null")
     private LocationDto location;
 
     private Boolean paid;

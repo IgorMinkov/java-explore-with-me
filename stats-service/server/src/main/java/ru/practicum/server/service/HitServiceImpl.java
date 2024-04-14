@@ -4,6 +4,7 @@ package ru.practicum.server.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.StatsDto;
 import ru.practicum.server.model.Hit;
 import ru.practicum.server.repository.HitRepository;
@@ -13,18 +14,20 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HitServiceImpl implements HitService {
 
     private final HitRepository hitRepository;
 
     @Override
+    @Transactional
     public void addHit(Hit hit) {
         hitRepository.save(hit);
     }
 
     @Override
-    public List<StatsDto> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (uris == null) {
             if (unique) {
                 log.info("Get all stats by uniq ip");

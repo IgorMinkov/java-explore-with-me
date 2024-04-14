@@ -27,7 +27,7 @@ public class RequestServiceImpl implements RequestService {
     private final EntityCheckService checkService;
 
     @Override
-    public Request addRequest(Long userId, Long eventId) {
+    public Request create(Long userId, Long eventId) {
         User user = checkService.getUserOrNotFound(userId);
         Event event = checkService.getEventOrNotFound(eventId);
 
@@ -58,14 +58,13 @@ public class RequestServiceImpl implements RequestService {
                 eventRepository.save(event);
                 return request;
             }
-
             request = requestRepository.save(request);
             return request;
         }
     }
 
     @Override
-    public List<Request> getRequestsByUserId(Long userId) {
+    public List<Request> getListByUserId(Long userId) {
         checkService.checkUser(userId);
         return requestRepository.findByRequesterId(userId);
     }

@@ -2,10 +2,10 @@ package ru.practicum.mainservice.event.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
@@ -34,16 +34,13 @@ import ru.practicum.mainservice.utils.enums.StateAction;
 import ru.practicum.mainservice.utils.enums.Status;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ru.practicum.Utils.*;
 
-@Component
-@RequiredArgsConstructor
+@Service
+@AllArgsConstructor
 @Transactional(readOnly = true)
 public class EventServiceImpl implements EventService {
 
@@ -52,7 +49,7 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final CategoryService categoryService;
     private final EntityCheckService checkService;
-    private StatsClient statsClient;
+    private final StatsClient statsClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override

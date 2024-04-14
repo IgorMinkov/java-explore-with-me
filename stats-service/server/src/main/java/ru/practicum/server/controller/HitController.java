@@ -39,7 +39,7 @@ public class HitController {
         LocalDateTime endTime = LocalDateTime.parse(end, STATS_FORMATTER);
 
         log.info("catch find stats request");
-        return hitService.findStats(startTime, endTime, uris, unique);
+        return hitService.getStats(startTime, endTime, uris, unique);
     }
 
 }

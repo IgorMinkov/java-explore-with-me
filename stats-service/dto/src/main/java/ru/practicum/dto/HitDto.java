@@ -30,7 +30,7 @@ public class HitDto {
     @NotBlank(message = "ip cannot consist only of spaces")
     private String ip;
 
-    @NotNull(message = "timestamp cannot consist only of spaces.")
+    @NotNull(message = "timestamp cannot be null")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime timestamp;
 

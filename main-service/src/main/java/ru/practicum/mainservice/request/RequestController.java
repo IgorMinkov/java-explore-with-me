@@ -26,7 +26,7 @@ public class RequestController {
     public RequestDto addRequest(@Positive @PathVariable Long userId,
                                  @Positive @RequestParam Long eventId) {
 
-        Request request = requestService.addRequest(userId, eventId);
+        Request request = requestService.create(userId, eventId);
         log.info("Пользователь с id {} добавил запрос на событие {}", userId, eventId);
         return RequestMapper.toRequestDto(request);
     }
@@ -35,7 +35,7 @@ public class RequestController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<RequestDto> getRequestsByUserId(@Positive @PathVariable Long userId) {
 
-        List<Request> result = requestService.getRequestsByUserId(userId);
+        List<Request> result = requestService.getListByUserId(userId);
         log.info("Поулчение списка всех запросов пользователя c id: {}", userId);
         return result.stream()
                 .map(RequestMapper::toRequestDto)

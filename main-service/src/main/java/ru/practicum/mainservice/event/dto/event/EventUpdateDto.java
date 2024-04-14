@@ -7,8 +7,6 @@ import ru.practicum.mainservice.event.dto.LocationDto;
 import ru.practicum.mainservice.utils.enums.StateAction;
 
 import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 

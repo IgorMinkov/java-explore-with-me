@@ -12,6 +12,8 @@ import ru.practicum.mainservice.utils.enums.Status;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static ru.practicum.mainservice.event.model.event.EventMapper.DATE_FORMAT;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -25,7 +27,7 @@ public class Request {
     private Long id;
 
     @Column(name = "created")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern =  DATE_FORMAT)
     private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY)

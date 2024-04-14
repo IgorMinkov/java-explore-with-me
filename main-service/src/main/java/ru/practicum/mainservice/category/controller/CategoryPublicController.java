@@ -24,8 +24,9 @@ public class CategoryPublicController {
 
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
-    public List<CategoryDto> getCategories(@PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-                                           @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+    public List<CategoryDto> getCategories(
+            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
+            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
         List<Category> result = categoryService.getList(from, size);
         log.info("Получение списка всех категорий с параметрами: from = {}, size = {}", from, size);
         return result.stream()

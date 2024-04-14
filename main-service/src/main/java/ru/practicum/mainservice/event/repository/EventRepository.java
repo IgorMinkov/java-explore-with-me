@@ -61,5 +61,4 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                             @Param("onlyAvailable") Boolean onlyAvailable,
                                             @Param("sort") String sort,
                                             PageRequest pageRequest);
-
 }

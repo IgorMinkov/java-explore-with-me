@@ -25,7 +25,7 @@ public class Hit {
     @EqualsAndHashCode.Exclude
     private String uri;
 
-    @Column(name = "ip", nullable = false)
+    @Column(name = "ip", nullable = false, length = 63)
     @EqualsAndHashCode.Exclude
     private String ip;
 

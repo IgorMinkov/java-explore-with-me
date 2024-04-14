@@ -3,10 +3,12 @@ package ru.practicum.mainservice.utils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.practicum.mainservice.category.CategoryRepository;
+import ru.practicum.mainservice.event.model.event.Event;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.event.repository.LocationRepository;
 import ru.practicum.mainservice.exception.DataNotFoundException;
 import ru.practicum.mainservice.user.UserRepository;
+import ru.practicum.mainservice.user.model.User;
 
 @Component
 @AllArgsConstructor
@@ -23,6 +25,11 @@ public class EntityCheckService {
         }
     }
 
+    public User getUserOrNotFound(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(String.format("Не найден пользователь c id: %s", id)));
+    }
+
     public void checkCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new DataNotFoundException(String.format("Не найдена категория c id: %s", id));
@@ -33,6 +40,11 @@ public class EntityCheckService {
         if (!eventRepository.existsById(id)) {
             throw new DataNotFoundException(String.format("Не найдено событие c id: %s", id));
         }
+    }
+
+    public Event getEventOrNotFound(Long id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException(String.format("Не найдено событие c id: %s", id)));
     }
 
     public void checkLocation(Long id) {

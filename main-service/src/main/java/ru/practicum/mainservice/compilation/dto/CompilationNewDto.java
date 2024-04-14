@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import java.util.Set;
 @Builder
 public class CompilationNewDto {
 
-    @NotEmpty(message = "compilation cannot consist of empty events")
     private Set<Long> events;
 
     @Builder.Default

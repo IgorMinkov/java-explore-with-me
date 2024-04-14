@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.dto.HitDto;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+
+import static ru.practicum.Utils.*;
 
 @Service
 public class StatsClient extends BaseClient {
-
-    private static final String HIT_PREFIX = "/hit";
-
-    private static final String STATS_PREFIX = "/stats";
 
     @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -32,22 +32,14 @@ public class StatsClient extends BaseClient {
         return post(HIT_PREFIX, hitDto);
     }
 
-    public ResponseEntity<Object> findStats(String start, String end, String[] uris, boolean unique) {
+    public ResponseEntity<Object> findStats(LocalDateTime start, LocalDateTime end, String uris, boolean unique) {
         Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
+                "start", start.format(DateTimeFormatter.ofPattern(STATS_DATE_FORMAT)),
+                "end", end.format(DateTimeFormatter.ofPattern(STATS_DATE_FORMAT)),
                 "uris", uris,
                 "unique", unique
         );
         return get(STATS_PREFIX + "?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
     }
 
-    public ResponseEntity<Object> findStatsWithoutUris(String start, String end, boolean unique) {
-        Map<String, Object> parameters = Map.of(
-                "start", start,
-                "end", end,
-                "unique", unique
-        );
-        return get(STATS_PREFIX + "?start={start}&end={end}&unique={unique}", parameters);
-    }
 }

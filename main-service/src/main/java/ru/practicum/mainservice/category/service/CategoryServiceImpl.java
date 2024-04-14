@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.category.CategoryRepository;
 import ru.practicum.mainservice.category.model.Category;
+import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.exception.DataNotFoundException;
+import ru.practicum.mainservice.exception.handler.ConflictException;
 import ru.practicum.mainservice.utils.EntityCheckService;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
     private final EntityCheckService checkService;
 
     @Override
@@ -52,6 +55,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void delete(Long categoryId) {
         checkService.checkCategory(categoryId);
+        if (!eventRepository.findByCategoryId(categoryId).isEmpty()) {
+            throw new ConflictException(String.format(
+                    "Категория с id: %s используется и не может быть удалена", categoryId));
+        }
         categoryRepository.deleteById(categoryId);
     }
 

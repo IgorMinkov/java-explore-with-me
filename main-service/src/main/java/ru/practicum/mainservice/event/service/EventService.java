@@ -1,6 +1,6 @@
 package ru.practicum.mainservice.event.service;
 
-import ru.practicum.mainservice.event.dto.event.EventNewDto;
+import ru.practicum.mainservice.event.dto.LocationDto;
 import ru.practicum.mainservice.event.dto.event.EventUpdateDto;
 import ru.practicum.mainservice.event.model.event.Event;
 import ru.practicum.mainservice.request.dto.RequestUpdateDtoRequest;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface EventService {
 
-    Event create(Long userId, EventNewDto eventnewDto);
+    Event create(Long userId, Event event, Long categoryId, LocationDto locationDto);
 
     List<Event> getAllByInitiator(Long userId, Integer from, Integer size);
 
@@ -29,9 +29,9 @@ public interface EventService {
     List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String startTime, String endTime,
                             Boolean onlyAvailable, String sort, Integer from, Integer size, String uri, String ip);
 
-    List<Request> getRequestsForEventIdByUserId(Long eventId, Long userId);
+    List<Request> getRequestsForEventByInitiator(Long eventId, Long userId);
 
-    RequestUpdateDtoResult updateStatusRequestsForEventIdByUserId(
+    RequestUpdateDtoResult updateStatusRequestsForEventByInitiator(
             RequestUpdateDtoRequest requestDto, Long eventId, Long userId);
 
 }

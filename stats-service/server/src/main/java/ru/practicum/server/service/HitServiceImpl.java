@@ -4,9 +4,8 @@ package ru.practicum.server.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.HitDto;
 import ru.practicum.dto.StatsDto;
-import ru.practicum.server.model.HitMapper;
+import ru.practicum.server.model.Hit;
 import ru.practicum.server.repository.HitRepository;
 
 import java.time.LocalDateTime;
@@ -20,8 +19,8 @@ public class HitServiceImpl implements HitService {
     private final HitRepository hitRepository;
 
     @Override
-    public void addHit(HitDto hitDto) {
-        hitRepository.save(HitMapper.toHit(hitDto));
+    public void addHit(Hit hit) {
+        hitRepository.save(hit);
     }
 
     @Override

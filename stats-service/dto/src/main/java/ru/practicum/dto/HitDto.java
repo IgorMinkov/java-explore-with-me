@@ -1,18 +1,24 @@
 package ru.practicum.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
+
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class HitDto {
 
-    @Positive(message = "id must be positive")
     private Long id;
 
     @NotBlank(message = "app cannot consist only of spaces")
@@ -24,7 +30,8 @@ public class HitDto {
     @NotBlank(message = "ip cannot consist only of spaces")
     private String ip;
 
-    @NotBlank(message = "timestamp cannot consist only of spaces.")
-    private String timestamp;
+    @NotNull(message = "timestamp cannot consist only of spaces.")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
+    private LocalDateTime timestamp;
 
 }

@@ -1,16 +1,20 @@
 package ru.practicum.mainservice.event.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.client.StatsClient;
 import ru.practicum.mainservice.event.dto.event.EventNewDto;
 import ru.practicum.mainservice.event.dto.event.EventUpdateDto;
 import ru.practicum.mainservice.event.model.event.Event;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.event.repository.LocationRepository;
+import ru.practicum.mainservice.request.RequestRepository;
 import ru.practicum.mainservice.request.dto.RequestUpdateDtoRequest;
 import ru.practicum.mainservice.request.dto.RequestUpdateDtoResult;
 import ru.practicum.mainservice.request.model.Request;
+import ru.practicum.mainservice.user.model.User;
 import ru.practicum.mainservice.utils.EntityCheckService;
 
 import java.util.List;
@@ -18,14 +22,19 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class EventServiceImpl implements EventService { // todo - написать методы сервиса
+public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final EntityCheckService checkService;
+    private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
+    private final EntityCheckService checkService;
+    private StatsClient statsClient;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Event create(Long userId, EventNewDto eventnewDto) {
+        User user = checkService.getUserOrNotFound(userId);
+
         return null;
     }
 

@@ -15,7 +15,7 @@ public class UserMapper {
                 .build();
     }
 
-    public UserShortDto toUserShortDto(User user) {
+    public static UserShortDto toUserShortDto(User user) {
         return UserShortDto.builder()
                 .id(user.getId())
                 .name(user.getName())

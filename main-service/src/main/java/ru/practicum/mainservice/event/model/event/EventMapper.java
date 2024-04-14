@@ -20,7 +20,7 @@ public class EventMapper {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    public Event toEvent(EventNewDto eventNewDto, Category category, Location location, User user) { // todo - возможен рефактор - получать сущности для создания в сервисе
+    public static Event toEvent(EventNewDto eventNewDto, Category category, Location location, User user) { // todo - возможен рефактор - получать сущности для создания в сервисе
         return Event.builder()
                 .initiator(user)
                 .category(category)
@@ -39,7 +39,7 @@ public class EventMapper {
                 .build();
     }
 
-    public EventFullDto toEventFullDto(Event event) {
+    public static EventFullDto toEventFullDto(Event event) {
         return EventFullDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -60,7 +60,7 @@ public class EventMapper {
                 .build();
     }
 
-    public EventShortDto toEventShortDto(Event event) {
+    public static EventShortDto toEventShortDto(Event event) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())

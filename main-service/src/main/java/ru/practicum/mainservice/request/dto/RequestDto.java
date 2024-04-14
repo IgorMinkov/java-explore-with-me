@@ -14,17 +14,17 @@ import static ru.practicum.mainservice.event.model.event.EventMapper.DATE_FORMAT
 @Builder
 public class RequestDto {
 
-    Long id;
+    private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
-    LocalDateTime created;
+    private LocalDateTime created;
 
     @NotNull
-    Long event;
+    private Long event;
 
     @NotNull
-    Long requester;
+    private Long requester;
 
-    Status status;
+    private Status status;
 
 }

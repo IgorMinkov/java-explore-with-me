@@ -3,6 +3,9 @@ package ru.practicum.mainservice.event.service;
 import ru.practicum.mainservice.event.dto.event.EventNewDto;
 import ru.practicum.mainservice.event.dto.event.EventUpdateDto;
 import ru.practicum.mainservice.event.model.event.Event;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoRequest;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoResult;
+import ru.practicum.mainservice.request.model.Request;
 
 import java.util.List;
 
@@ -25,5 +28,10 @@ public interface EventService {
 
     List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String startTime, String endTime,
                             Boolean onlyAvailable, String sort, Integer from, Integer size, String uri, String ip);
+
+    List<Request> getRequestsForEventIdByUserId(Long eventId, Long userId);
+
+    RequestUpdateDtoResult updateStatusRequestsForEventIdByUserId(
+            RequestUpdateDtoRequest requestDto, Long eventId, Long userId);
 
 }

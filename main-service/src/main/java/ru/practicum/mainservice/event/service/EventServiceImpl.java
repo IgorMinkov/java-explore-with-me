@@ -8,6 +8,9 @@ import ru.practicum.mainservice.event.dto.event.EventUpdateDto;
 import ru.practicum.mainservice.event.model.event.Event;
 import ru.practicum.mainservice.event.repository.EventRepository;
 import ru.practicum.mainservice.event.repository.LocationRepository;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoRequest;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoResult;
+import ru.practicum.mainservice.request.model.Request;
 import ru.practicum.mainservice.utils.EntityCheckService;
 
 import java.util.List;
@@ -61,6 +64,17 @@ public class EventServiceImpl implements EventService { // todo - написат
     public List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String startTime, String endTime,
                                    Boolean onlyAvailable, String sort, Integer from, Integer size,
                                    String uri, String ip) {
+        return null;
+    }
+
+    @Override
+    public List<Request> getRequestsForEventIdByUserId(Long eventId, Long userId) {
+        return null;
+    }
+
+    @Override
+    public RequestUpdateDtoResult updateStatusRequestsForEventIdByUserId(
+            RequestUpdateDtoRequest requestDto, Long eventId, Long userId) {
         return null;
     }
 }

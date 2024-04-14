@@ -11,6 +11,11 @@ import ru.practicum.mainservice.event.dto.event.EventUpdateDto;
 import ru.practicum.mainservice.event.model.event.Event;
 import ru.practicum.mainservice.event.model.event.EventMapper;
 import ru.practicum.mainservice.event.service.EventService;
+import ru.practicum.mainservice.request.dto.RequestDto;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoRequest;
+import ru.practicum.mainservice.request.dto.RequestUpdateDtoResult;
+import ru.practicum.mainservice.request.model.Request;
+import ru.practicum.mainservice.request.model.RequestMapper;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -30,7 +35,7 @@ public class EventPrivateController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public EventFullDto addEvent(@Valid @RequestBody EventNewDto eventNewDto, @PathVariable Long userId) {
         Event event = eventService.create(userId, eventNewDto);
-        log.info("Пользователь с id {}, добавляет событие {} ", userId, eventNewDto.getAnnotation());
+        log.info("Пользователь с id {}, добавляет событие {}", userId, eventNewDto.getAnnotation());
         return EventMapper.toEventFullDto(event);
     }
 
@@ -42,7 +47,8 @@ public class EventPrivateController {
             @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
 
         List<Event> result = eventService.getAllByInitiator(userId, from, size);
-        log.info("List events for User Id {}. Where from = {}, size = {}", userId, from, size);
+        log.info("Получение списка событий для пользователя с id: {}." +
+                "Параметры from = {}, size = {}", userId, from, size);
         return result.stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
@@ -53,7 +59,7 @@ public class EventPrivateController {
     public EventFullDto getInitiatorEvent(@PathVariable Long userId,
                                          @PathVariable Long eventId) {
         Event event = eventService.getByInitiator(userId, eventId);
-        log.info("Автор с id: {} запросил свое событие с id: {} ", eventId, userId);
+        log.info("Автор с id: {} запросил свое событие с id: {}", eventId, userId);
         return EventMapper.toEventFullDto(event);
     }
 
@@ -63,22 +69,28 @@ public class EventPrivateController {
                                             @PathVariable Long userId,
                                             @PathVariable Long eventId) {
         Event updatedEvent = eventService.updateByInitiator(eventUpdateDto, userId, eventId);
-        log.info("Пользователь с id{}, обновил событие {} ", eventId, eventUpdateDto.getAnnotation());
+        log.info("Пользователь с id{}, обновил событие {}", eventId, eventUpdateDto.getAnnotation());
         return EventMapper.toEventFullDto(updatedEvent);
     }
 
-    @GetMapping("/{eventId}/requests") // todo - заполнить методы после создания функционала запросов
+    @GetMapping("/{eventId}/requests")
     @ResponseStatus(value = HttpStatus.OK)
-    public List<EventFullDto> getRequestsForEventIdByUserId(@PathVariable Long userId, @PathVariable Long eventId) {
-        return null;
+    public List<RequestDto> getRequestsForEventIdByUserId(@PathVariable Long userId, @PathVariable Long eventId) {
+        List<Request> result = eventService.getRequestsForEventIdByUserId(eventId, userId);
+        log.info("Получение всех запросов события с id: {} для пользователя с id: {}", eventId, userId);
+        return result.stream()
+                .map(RequestMapper::toRequestDto)
+                .collect(Collectors.toList());
     }
 
     @PatchMapping("/{eventId}/requests")
     @ResponseStatus(value = HttpStatus.OK)
-    public EventFullDto updateStatusRequestsForEventIdByUserId(@PathVariable Long userId,
-                                                               @PathVariable Long eventId,
-                                                               @RequestBody EventUpdateDto eventUpdateDto) {
-        return null;
+    public RequestUpdateDtoResult updateStatusRequestsForEventIdByUserId(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @RequestBody RequestUpdateDtoRequest requestDto) {
+        log.info("Обновление статуса события с id: {}, пользователем с id: {}", eventId, userId);
+        return eventService.updateStatusRequestsForEventIdByUserId(requestDto, userId, eventId);
     }
 
 }

@@ -26,18 +26,18 @@ public class Request {
 
     @Column(name = "created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime created;
+    private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
-    Event event;
+    private Event event;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requester_id", nullable = false)
-    User requester;
+    private User requester;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    Status status;
+    private Status status;
 
 }

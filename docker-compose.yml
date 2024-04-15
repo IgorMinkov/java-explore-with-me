@@ -28,7 +28,7 @@ services:
     image: main-service
     container_name: main-service
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - ewm-main-db
       - stats-service

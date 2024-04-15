@@ -18,8 +18,6 @@ services:
     container_name: stats-db
     ports:
       - "6541:5432"
-    volumes:
-      - stats-db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=stats-service-db
       - POSTGRES_USER=root
@@ -45,8 +43,6 @@ services:
     container_name: ewm-main-db
     ports:
       - "6542:5432"
-    volumes:
-      - ewm-main-db:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=ewm-main-db
       - POSTGRES_USER=root

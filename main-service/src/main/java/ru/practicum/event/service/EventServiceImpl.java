@@ -21,7 +21,7 @@ import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.repository.LocationRepository;
 import ru.practicum.exception.DataNotFoundException;
 import ru.practicum.exception.ValidationException;
-import ru.practicum.exception.handler.ConflictException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.request.RequestRepository;
 import ru.practicum.request.dto.RequestUpdateDtoRequest;
 import ru.practicum.request.dto.RequestUpdateDtoResult;

@@ -8,7 +8,7 @@ import ru.practicum.category.CategoryRepository;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.DataNotFoundException;
-import ru.practicum.exception.handler.ConflictException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.utils.EntityCheckService;
 
 import java.util.List;

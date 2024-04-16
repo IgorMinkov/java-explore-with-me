@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.StatsDto;
+import ru.practicum.exception.StatsValidationException;
 import ru.practicum.model.Hit;
 import ru.practicum.repository.HitRepository;
 
@@ -28,7 +29,14 @@ public class HitServiceImpl implements HitService {
 
     @Override
     public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if (uris == null) {
+
+        if (start != null && end != null) {
+            if (start.isAfter(end)) {
+                throw new StatsValidationException("Start must be after End");
+            }
+        }
+
+        if (uris == null || uris.isEmpty()) {
             if (unique) {
                 log.info("Get all stats by uniq ip");
                 return hitRepository.findAllStatsByUniqIp(start, end);

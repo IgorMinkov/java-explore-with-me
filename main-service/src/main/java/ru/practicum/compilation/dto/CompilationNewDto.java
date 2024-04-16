@@ -17,7 +17,7 @@ public class CompilationNewDto {
     private Boolean pinned = false;
 
     @NotBlank(message = "compilation title cannot be empty and consist only of spaces")
-    @Size(max = 63)
+    @Size(min = 1, max = 50)
     private String title;
 
 }

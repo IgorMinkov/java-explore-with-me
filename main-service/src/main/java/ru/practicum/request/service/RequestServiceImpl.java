@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.DataNotFoundException;
 import ru.practicum.event.model.event.Event;
-import ru.practicum.exception.handler.ConflictException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.request.RequestRepository;
 import ru.practicum.request.model.Request;
 import ru.practicum.user.model.User;

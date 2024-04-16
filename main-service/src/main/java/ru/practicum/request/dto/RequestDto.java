@@ -18,10 +18,8 @@ public class RequestDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = EventMapper.DATE_FORMAT)
     private LocalDateTime created;
 
-    @NotNull
     private Long event;
 
-    @NotNull
     private Long requester;
 
     private Status status;

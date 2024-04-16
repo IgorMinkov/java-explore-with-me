@@ -14,7 +14,7 @@ public class CompilationUpdateDto {
 
     private Boolean pinned;
 
-    @Size(min = 3, max = 120, message = "title must be greater than 3 and less than 120")
+    @Size(min = 1, max = 50, message = "title must be greater than 1 and less than 50")
     private String title;
 
 }

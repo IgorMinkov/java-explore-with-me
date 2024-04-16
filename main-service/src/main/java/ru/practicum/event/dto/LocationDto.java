@@ -9,10 +9,8 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class LocationDto {
 
-    @NotNull(message = "latitude cannot be null")
     private Float lat;
 
-    @NotNull(message = "longitude cannot be null")
     private Float lon;
 
 }

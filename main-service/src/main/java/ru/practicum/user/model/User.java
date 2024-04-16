@@ -16,11 +16,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, length = 127)
+    @Column(name = "name", nullable = false)
     @EqualsAndHashCode.Exclude
     private String name;
 
-    @Column(name = "email", nullable = false, unique = true, length = 127)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
 }

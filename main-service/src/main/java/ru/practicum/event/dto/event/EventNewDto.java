@@ -18,18 +18,18 @@ import static ru.practicum.event.model.event.EventMapper.DATE_FORMAT;
 public class EventNewDto {
 
     @NotBlank(message = "annotation cannot consist only of spaces")
-    @Size(min = 20, max = 2000)
+    @Size(min = 20, max = 2000, message = "annotation must be greater than 20 and less than 2000")
     private String annotation;
 
     @NotNull(message = "category cannot be null")
     private Long category;
 
     @NotBlank(message = "title cannot consist only of spaces")
-    @Size(min = 3, max = 120)
+    @Size(min = 3, max = 120, message = "title must be greater than 3 and less than 120")
     private String title;
 
     @NotBlank(message = "description cannot consist only of spaces")
-    @Size(min = 20, max = 7000)
+    @Size(min = 20, max = 7000, message = "description must be greater than 20 and less than 7000")
     private String description;
 
     @NotNull
@@ -47,6 +47,6 @@ public class EventNewDto {
     private Long participantLimit = 0L;
 
     @Builder.Default
-    private Boolean requestModeration = false;
+    private Boolean requestModeration = true;
 
 }

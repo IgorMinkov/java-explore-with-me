@@ -16,15 +16,15 @@ import static ru.practicum.event.model.event.EventMapper.DATE_FORMAT;
 @Builder
 public class EventUpdateDto {
 
-    @Size(min = 20, max = 2000)
+    @Size(min = 20, max = 2000, message = "annotation must be greater than 20 and less than 2000")
     private String annotation;
 
     private Long category;
 
-    @Size(min = 3, max = 120)
+    @Size(min = 3, max = 120, message = "title must be greater than 3 and less than 120")
     private String title;
 
-    @Size(min = 20, max = 7000)
+    @Size(min = 20, max = 7000, message = "description must be greater than 20 and less than 7000")
     private String description;
 
     @FutureOrPresent(message = "event date must be today or in the future")

@@ -8,7 +8,6 @@ import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -41,14 +40,12 @@ public class Event {
     @EqualsAndHashCode.Exclude
     private Location location;
 
-    @Size(min = 20, max = 2000)
     @Column(name = "annotation", nullable = false)
     private String annotation;
 
     @Column(name = "title", nullable = false, length = 127)
     private String title;
 
-    @Size(min = 20, max = 7000)
     @Column(name = "description")
     private String description;
 

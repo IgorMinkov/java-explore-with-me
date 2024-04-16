@@ -75,7 +75,7 @@ public class EventServiceImpl implements EventService {
     public Event getByInitiator(Long userId, Long eventId) {
         checkService.checkUser(userId);
         checkService.checkEvent(eventId);
-        return eventRepository.findByIdAndInitiatorId(eventId, userId);
+        return eventRepository.findByInitiatorIdAndId(userId, eventId);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class EventServiceImpl implements EventService {
             } else {
                 if (!event.getState().equals(State.PENDING)) {
                     throw new ConflictException(String.format(
-                            "Событие %s в статусе отличном от \"PENDING\", не можем быть отменено", event.getTitle()));
+                            "Событие %s в статусе отличном от PENDING, не можем быть отменено", event.getTitle()));
                 }
                 event.setState(State.CANCELED);
             }
@@ -149,7 +149,7 @@ public class EventServiceImpl implements EventService {
             throw new DataNotFoundException(String.format("Запрашиваемое событие %s не опубликовано", eventId));
         }
         sendInfo(uri, ip);
-        event.setViews(getViewsEventById(event.getId()));
+        event.setViews(getEventViewsById(event.getId()));
         eventRepository.save(event);
         return event;
     }
@@ -173,7 +173,7 @@ public class EventServiceImpl implements EventService {
 
         sendInfo(uri, ip);
         for (Event event : events) {
-            event.setViews(getViewsEventById(event.getId()));
+            event.setViews(getEventViewsById(event.getId()));
             eventRepository.save(event);
         }
         return events;
@@ -265,8 +265,8 @@ public class EventServiceImpl implements EventService {
         }
         if (eventUpdateDto.getLocation() != null) {
             event.setLocation(LocationMapper.toLocation(eventUpdateDto.getLocation()));
+            locationRepository.save(event.getLocation());
         }
-        locationRepository.save(event.getLocation());
 
         Optional.ofNullable(eventUpdateDto.getEventDate()).ifPresent(event::setEventDate);
         Optional.ofNullable(eventUpdateDto.getPaid()).ifPresent(event::setPaid);
@@ -274,7 +274,7 @@ public class EventServiceImpl implements EventService {
         Optional.ofNullable(eventUpdateDto.getRequestModeration()).ifPresent(event::setRequestModeration);
 
         if (eventUpdateDto.getStateAction() != null) {
-            if (eventUpdateDto.getStateAction() == StateAction.PUBLISH_EVENT) {
+            if (eventUpdateDto.getStateAction().equals(StateAction.PUBLISH_EVENT)) {
                 event.setState(State.PUBLISHED);
                 event.setPublishedOn(LocalDateTime.now());
             } else if (eventUpdateDto.getStateAction() == StateAction.REJECT_EVENT ||
@@ -297,11 +297,10 @@ public class EventServiceImpl implements EventService {
         statsClient.addHit(hitDto);
     }
 
-    private Long getViewsEventById(Long eventId) {
+    private Long getEventViewsById(Long eventId) {
         String uri = "/events/" + eventId;
         ResponseEntity<Object> response = statsClient.findStats(START_HISTORY, LocalDateTime.now(), uri, true);
-        List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {
-        });
+        List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {});
 
         if (result.isEmpty()) {
             return 0L;

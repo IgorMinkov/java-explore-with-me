@@ -1,7 +1,7 @@
 package ru.practicum.request.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.DataNotFoundException;
@@ -17,7 +17,7 @@ import ru.practicum.utils.enums.Status;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
@@ -27,6 +27,7 @@ public class RequestServiceImpl implements RequestService {
     private final EntityCheckService checkService;
 
     @Override
+    @Transactional
     public Request create(Long userId, Long eventId) {
         User user = checkService.getUserOrNotFound(userId);
         Event event = checkService.getEventOrNotFound(eventId);
@@ -53,13 +54,11 @@ public class RequestServiceImpl implements RequestService {
 
             if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
                 request.setStatus(Status.CONFIRMED);
-                request = requestRepository.save(request);
                 event.setConfirmedRequests(requestRepository.countAllByEventIdAndStatus(eventId, Status.CONFIRMED));
                 eventRepository.save(event);
-                return request;
+                return requestRepository.save(request);
             }
-            request = requestRepository.save(request);
-            return request;
+            return requestRepository.save(request);
         }
     }
 
@@ -70,6 +69,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public Request cancelRequest(Long userId, Long requestId) {
         checkService.checkUser(userId);
         Request request = requestRepository.findById(requestId)

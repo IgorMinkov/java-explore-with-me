@@ -66,9 +66,10 @@ public class EventPrivateController {
 
     @PatchMapping("/{eventId}")
     @ResponseStatus(value = HttpStatus.OK)
-    public EventFullDto updateEventByInitiator(@RequestBody @Valid EventUpdateDto eventUpdateDto,
-                                            @PathVariable Long userId,
-                                            @PathVariable Long eventId) {
+    public EventFullDto updateEventByInitiator(
+            @Valid @RequestBody EventUpdateDto eventUpdateDto,
+            @PathVariable Long userId,
+            @PathVariable Long eventId) {
         Event updatedEvent = eventService.updateByInitiator(eventUpdateDto, userId, eventId);
         log.info("Пользователь с id{}, обновил событие {}", eventId, eventUpdateDto.getAnnotation());
         return EventMapper.toEventFullDto(updatedEvent);
@@ -91,7 +92,7 @@ public class EventPrivateController {
             @PathVariable Long eventId,
             @RequestBody RequestUpdateDtoRequest requestDto) {
         log.info("Обновление статуса события с id: {}, пользователем с id: {}", eventId, userId);
-        return eventService.updateStatusRequestsForEventByInitiator(requestDto, userId, eventId);
+        return eventService.updateStatusRequestsForEventByInitiator(requestDto, eventId, userId);
     }
 
 }

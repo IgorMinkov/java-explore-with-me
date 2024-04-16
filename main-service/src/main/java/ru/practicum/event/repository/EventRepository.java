@@ -19,7 +19,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByCategoryId(Long categoryId);
 
-    Event findByIdAndInitiatorId(Long eventId, Long initiatorId);
+    Event findByInitiatorIdAndId(Long initiatorId, Long eventId);
 
     Set<Event> findByIdIn(Set<Long> eventIds);
 

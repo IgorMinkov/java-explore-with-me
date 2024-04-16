@@ -2,7 +2,7 @@ package ru.practicum.compilation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.CompilationRepository;
 import ru.practicum.compilation.dto.CompilationUpdateDto;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
+@Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CompilationServiceImpl implements CompilationService {
@@ -28,6 +28,9 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public Compilation create(Compilation compilation, Set<Long> eventIds) {
+        if (compilation.getPinned() == null) {
+            compilation.setPinned(false);
+        }
         if (eventIds == null || eventIds.isEmpty()) {
             compilation.setEvents(Collections.emptySet());
         } else {
@@ -40,7 +43,9 @@ public class CompilationServiceImpl implements CompilationService {
     @Transactional
     public Compilation update(Long compId, CompilationUpdateDto compilationUpdateDto) {
         Compilation updatedCompilation = getById(compId);
-        Optional.ofNullable(compilationUpdateDto.getPinned()).ifPresent(updatedCompilation::setPinned);
+        if (updatedCompilation.getPinned() == null) {
+            updatedCompilation.setPinned(false);
+        }
         Optional.ofNullable(compilationUpdateDto.getTitle()).ifPresent(updatedCompilation::setTitle);
         if (compilationUpdateDto.getEvents() == null || compilationUpdateDto.getEvents().isEmpty()) {
             updatedCompilation.setEvents(Collections.emptySet());

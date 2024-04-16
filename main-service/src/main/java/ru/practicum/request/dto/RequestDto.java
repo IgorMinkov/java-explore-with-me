@@ -6,7 +6,6 @@ import lombok.Data;
 import ru.practicum.event.model.event.EventMapper;
 import ru.practicum.utils.enums.Status;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data

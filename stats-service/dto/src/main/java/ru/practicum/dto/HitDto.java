@@ -19,8 +19,6 @@ import static ru.practicum.Utils.STATS_DATE_FORMAT;
 @NoArgsConstructor
 public class HitDto {
 
-    private Long id;
-
     @NotBlank(message = "app cannot consist only of spaces")
     private String app;
 

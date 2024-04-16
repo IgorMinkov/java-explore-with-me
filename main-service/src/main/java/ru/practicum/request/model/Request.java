@@ -2,13 +2,14 @@ package ru.practicum.request.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import ru.practicum.event.model.event.EventMapper;
 import ru.practicum.event.model.event.Event;
 import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
 
 @Data
 @Builder
@@ -23,7 +24,7 @@ public class Request {
     private Long id;
 
     @Column(name = "created")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = EventMapper.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY)

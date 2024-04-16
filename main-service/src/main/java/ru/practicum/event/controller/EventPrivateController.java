@@ -3,6 +3,7 @@ package ru.practicum.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.event.EventFullDto;
 import ru.practicum.event.dto.event.EventNewDto;
@@ -25,8 +26,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/users/{userId}/events")
+@RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
+@Validated
 public class EventPrivateController {
 
     private final EventService eventService;
@@ -44,8 +46,8 @@ public class EventPrivateController {
     @ResponseStatus(value = HttpStatus.OK)
     public List<EventShortDto> getAllInitiatorEvents(
             @PathVariable Long userId,
-            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size) {
 
         List<Event> result = eventService.getAllByInitiator(userId, from, size);
         log.info("Получение списка событий для пользователя с id: {}." +

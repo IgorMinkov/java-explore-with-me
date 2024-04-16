@@ -2,7 +2,9 @@ package ru.practicum.event.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.event.EventFullDto;
 import ru.practicum.event.dto.event.EventUpdateDto;
@@ -16,10 +18,13 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
+
 @Slf4j
 @RestController
-@RequestMapping("/admin/events")
+@RequestMapping(path = "/admin/events")
 @RequiredArgsConstructor
+@Validated
 public class EventAdminController {
 
     private final EventService eventService;
@@ -27,13 +32,13 @@ public class EventAdminController {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public List<EventFullDto> getEventsByAdmin(
-            @RequestParam(name = "users", required = false) List<Long> users,
-            @RequestParam(name = "states", required = false) List<String> states,
-            @RequestParam(name = "categories", required = false) List<Long> categories,
-            @RequestParam(name = "rangeStart", required = false) String rangeStart,
-            @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
-            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
+            @RequestParam(required = false) List<Long> users,
+            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) @DateTimeFormat(pattern = STATS_DATE_FORMAT) String rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = STATS_DATE_FORMAT)String rangeEnd,
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size) {
 
         List<Event> result = eventService.getByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
 

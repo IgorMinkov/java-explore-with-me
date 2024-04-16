@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+import ru.practicum.dto.StatsDto;
 
 import java.util.List;
 import java.util.Map;
@@ -24,11 +26,14 @@ public class BaseClient {
     }
 
     protected ResponseEntity<Object> get(String path, @Nullable Map<String, Object> parameters) {
-        return makeAndSendRequest(HttpMethod.GET, path, parameters, null);
+        return makeAndSendStat(HttpMethod.GET, path, parameters);
     }
 
     private <T> ResponseEntity<Object> makeAndSendRequest(
-            HttpMethod method, String path, @Nullable Map<String, Object> parameters, @Nullable T body) {
+            HttpMethod method,
+            String path,
+            @Nullable Map<String, Object> parameters,
+            @Nullable T body) {
         HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders());
 
         ResponseEntity<Object> statsServiceResponse;
@@ -42,6 +47,26 @@ public class BaseClient {
             return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
         }
         return prepareGatewayResponse(statsServiceResponse);
+    }
+
+    private ResponseEntity<Object> makeAndSendStat(
+            HttpMethod method,
+            String path,
+            @Nullable Map<String, Object> parameters) {
+        HttpEntity<List<StatsDto>> requestEntity = new HttpEntity<>(null, defaultHeaders());
+        ResponseEntity<Object> statsServiceResponse;
+        try {
+            if (parameters != null) {
+                statsServiceResponse = rest.exchange(path, method, requestEntity,
+                        new ParameterizedTypeReference<>() {}, parameters);
+            } else {
+                statsServiceResponse = rest.exchange(path, method, requestEntity,
+                        new ParameterizedTypeReference<>() {});
+            }
+        } catch (HttpStatusCodeException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return prepareStatResponse(statsServiceResponse);
     }
 
     private HttpHeaders defaultHeaders() {
@@ -64,4 +89,16 @@ public class BaseClient {
 
         return responseBuilder.build();
     }
+
+    private static ResponseEntity<Object> prepareStatResponse(ResponseEntity<Object> response) {
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response;
+        }
+        ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode());
+        if (response.hasBody()) {
+            return responseBuilder.body(response.getBody());
+        }
+        return responseBuilder.build();
+    }
+
 }

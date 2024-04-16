@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @UtilityClass
 public class EventMapper {
 
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     public static Event toEvent(EventNewDto eventNewDto) {
         return Event.builder()
                 .annotation(eventNewDto.getAnnotation())

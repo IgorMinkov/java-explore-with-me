@@ -1,8 +1,10 @@
 package ru.practicum.event.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.event.dto.LocationDto;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -11,10 +13,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static ru.practicum.event.model.event.EventMapper.DATE_FORMAT;
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventNewDto {
 
     @NotBlank(message = "annotation cannot consist only of spaces")
@@ -24,17 +28,13 @@ public class EventNewDto {
     @NotNull(message = "category cannot be null")
     private Long category;
 
-    @NotBlank(message = "title cannot consist only of spaces")
-    @Size(min = 3, max = 120, message = "title must be greater than 3 and less than 120")
-    private String title;
-
     @NotBlank(message = "description cannot consist only of spaces")
     @Size(min = 20, max = 7000, message = "description must be greater than 20 and less than 7000")
     private String description;
 
     @NotNull
     @FutureOrPresent(message = "event date must be today or in the future")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime eventDate;
 
     @NotNull(message = "location cannot be null")
@@ -48,5 +48,9 @@ public class EventNewDto {
 
     @Builder.Default
     private Boolean requestModeration = true;
+
+    @NotBlank(message = "title cannot consist only of spaces")
+    @Size(min = 3, max = 120, message = "title must be greater than 3 and less than 120")
+    private String title;
 
 }

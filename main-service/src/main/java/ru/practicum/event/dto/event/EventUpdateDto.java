@@ -10,8 +10,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-import static ru.practicum.event.model.event.EventMapper.DATE_FORMAT;
-
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
 @Data
 @Builder
 public class EventUpdateDto {
@@ -28,7 +27,7 @@ public class EventUpdateDto {
     private String description;
 
     @FutureOrPresent(message = "event date must be today or in the future")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime eventDate;
 
     private LocationDto location;

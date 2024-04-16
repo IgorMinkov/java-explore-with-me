@@ -10,6 +10,8 @@ import ru.practicum.utils.enums.State;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static ru.practicum.Utils.STATS_DATE_FORMAT;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -50,7 +52,7 @@ public class Event {
     private String description;
 
     @Column(name = "event_date", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = EventMapper.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime eventDate;
 
     @Column(name = "paid")
@@ -66,11 +68,11 @@ public class Event {
     private Boolean requestModeration;
 
     @Column(name = "published_on")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = EventMapper.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime publishedOn;
 
     @Column(name = "created_on")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = EventMapper.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime createdOn;
 
     @Enumerated(EnumType.STRING)

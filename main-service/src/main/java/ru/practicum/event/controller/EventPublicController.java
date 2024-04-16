@@ -3,6 +3,7 @@ package ru.practicum.event.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,9 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/events")
+@RequestMapping(path = "/events")
 @RequiredArgsConstructor
+@Validated
 public class EventPublicController {
 
     private final EventService eventService;
@@ -29,15 +31,15 @@ public class EventPublicController {
     @GetMapping
     @ResponseStatus(value = HttpStatus.OK)
     public List<EventShortDto> getEventsByPublic(
-            @RequestParam(name = "text", required = false) String text,
-            @RequestParam(name = "categories", required = false) List<Long> categories,
-            @RequestParam(name = "paid", required = false) Boolean paid,
-            @RequestParam(name = "rangeStart", required = false) String rangeStart,
-            @RequestParam(name = "rangeEnd", required = false) String rangeEnd,
-            @RequestParam(name = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(name = "sort", required = false) String sort,
-            @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-            @Positive @RequestParam(name = "size", defaultValue = "10") Integer size,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) Boolean paid,
+            @RequestParam(required = false) String rangeStart,
+            @RequestParam(required = false) String rangeEnd,
+            @RequestParam( defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(defaultValue = "EVENT_DATE") String sort,
+            @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+            @Positive @RequestParam(defaultValue = "10") Integer size,
             HttpServletRequest request) {
 
         String uri = request.getRequestURI();

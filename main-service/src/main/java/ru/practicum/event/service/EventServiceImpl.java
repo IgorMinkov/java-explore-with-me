@@ -35,6 +35,7 @@ import ru.practicum.utils.enums.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -123,8 +124,14 @@ public class EventServiceImpl implements EventService {
     public List<Event> getByAdmin(List<Long> users, List<String> states, List<Long> categories,
                                   String rangeStart, String rangeEnd, Integer from, Integer size) {
 
-        LocalDateTime startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
-        LocalDateTime endTime = LocalDateTime.parse(rangeEnd, STATS_FORMATTER);
+        LocalDateTime startTime = null;
+        LocalDateTime endTime = null;
+        if (!rangeStart.isBlank()) {
+            startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+        }
+        if (!rangeEnd.isBlank()) {
+            endTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+        }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {
                 throw new ValidationException("Start must be after End");
@@ -155,19 +162,26 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String rangeStart, String rangeEnd,
                                    Boolean onlyAvailable, String sort, Integer from, Integer size,
                                    HttpServletRequest request) {
-        LocalDateTime startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
-        LocalDateTime endTime = LocalDateTime.parse(rangeEnd, STATS_FORMATTER);
 
+        LocalDateTime startTime = null;
+        LocalDateTime endTime = null;
+        if (!rangeStart.isBlank()) {
+            startTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        if (!rangeEnd.isBlank()) {
+            endTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {
                 throw new ValidationException("Start must be after End");
             }
         }
-
         PageRequest pageRequest = PageRequest.of(from / size, size);
         List<Event> events = eventRepository.findEventsByPublicFromParam(
                 text, categories, paid, startTime, endTime, onlyAvailable, sort, pageRequest);

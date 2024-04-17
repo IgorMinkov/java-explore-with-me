@@ -42,10 +42,8 @@ public class EventPublicController {
             @Positive @RequestParam(defaultValue = "10") Integer size,
             HttpServletRequest request) {
 
-        String uri = request.getRequestURI();
-        String ip = request.getRemoteAddr();
         List<Event> result = eventService.getByPublic(text, categories, paid, rangeStart, rangeEnd,
-                onlyAvailable, sort, from, size, uri, ip);
+                onlyAvailable, sort, from, size, request);
 
         log.info("Получение списка событий: text = {}, categories = {}, paid = {}, rangeStart = {}," +
                 " rangeEnd = {}, onlyAvailable = {}, sort= {}, from = {}, size = {}",
@@ -62,7 +60,7 @@ public class EventPublicController {
         String uri = request.getRequestURI();
         String ip = request.getRemoteAddr();
         log.info("Получение события с id: {}", id);
-        return EventMapper.toEventFullDto(eventService.getById(id, uri, ip));
+        return EventMapper.toEventFullDto(eventService.getById(id, request));
     }
 
 }

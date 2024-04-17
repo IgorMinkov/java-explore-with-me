@@ -31,8 +31,8 @@ public class HitController {
     }
 
     @GetMapping(STATS_PREFIX)
-    public List<StatsDto> findStats(@RequestParam("start") String start,
-                                    @RequestParam("end") String end,
+    public List<StatsDto> findStats(@RequestParam String start,
+                                    @RequestParam String end,
                                     @RequestParam(required = false) List<String> uris,
                                     @RequestParam(defaultValue = "false") Boolean unique) {
         LocalDateTime startTime = LocalDateTime.parse(start, STATS_FORMATTER);

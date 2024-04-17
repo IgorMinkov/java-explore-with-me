@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS events (
     initiator_id BIGINT NOT NULL,
     category_id BIGINT NOT NULL,
     location_id BIGINT NOT NULL,
-    title VARCHAR(127) NOT NULL,
+    title VARCHAR(120) NOT NULL,
     annotation VARCHAR(2000) NOT NULL,
     event_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
     paid BOOLEAN DEFAULT FALSE,

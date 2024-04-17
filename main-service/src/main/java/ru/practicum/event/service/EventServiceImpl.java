@@ -33,6 +33,7 @@ import ru.practicum.utils.enums.State;
 import ru.practicum.utils.enums.StateAction;
 import ru.practicum.utils.enums.Status;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -143,13 +144,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event getById(Long eventId, String uri, String ip) {
+    public Event getById(Long eventId, HttpServletRequest request) {
         Event event = getOrNotFound(eventId);
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new DataNotFoundException(String.format("Запрашиваемое событие %s не опубликовано", eventId));
         }
-        sendInfo(uri, ip);
-        event.setViews(getEventViewsById(event.getId()));
+        sendInfo(request);
+        event.setViews(getEventViewsById(request));
         eventRepository.save(event);
         return event;
     }
@@ -157,7 +158,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String rangeStart, String rangeEnd,
                                    Boolean onlyAvailable, String sort, Integer from, Integer size,
-                                   String uri, String ip) {
+                                   HttpServletRequest request) {
         LocalDateTime startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
         LocalDateTime endTime = LocalDateTime.parse(rangeEnd, STATS_FORMATTER);
 
@@ -171,9 +172,9 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findEventsByPublicFromParam(
                 text, categories, paid, startTime, endTime, onlyAvailable, sort, pageRequest);
 
-        sendInfo(uri, ip);
+        sendInfo(request);
         for (Event event : events) {
-            event.setViews(getEventViewsById(event.getId()));
+            event.setViews(getEventViewsById(request));
             eventRepository.save(event);
         }
         return events;
@@ -287,18 +288,18 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-    private void sendInfo(String uri, String ip) {
+    private void sendInfo(HttpServletRequest request) {
         HitDto hitDto = HitDto.builder()
                 .app("main-service")
-                .uri(uri)
-                .ip(ip)
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
                 .timestamp(LocalDateTime.now())
                 .build();
         statsClient.addHit(hitDto);
     }
 
-    private Long getEventViewsById(Long eventId) {
-        String uri = "/events/" + eventId;
+    private Long getEventViewsById(HttpServletRequest request) {
+        List<String> uri = List.of(request.getRequestURI());
         ResponseEntity<Object> response = statsClient.findStats(START_HISTORY, LocalDateTime.now(), uri, true);
         List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {});
 

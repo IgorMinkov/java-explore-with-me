@@ -7,6 +7,7 @@ import ru.practicum.request.dto.RequestUpdateDtoRequest;
 import ru.practicum.request.dto.RequestUpdateDtoResult;
 import ru.practicum.request.model.Request;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EventService {
@@ -24,10 +25,10 @@ public interface EventService {
     List<Event> getByAdmin(List<Long> users, List<String> states, List<Long> categories,
                            String startTime, String endTime, Integer from, Integer size);
 
-    Event getById(Long eventId, String uri, String ip);
+    Event getById(Long eventId, HttpServletRequest request);
 
     List<Event> getByPublic(String text, List<Long> categories, Boolean paid, String startTime, String endTime,
-                            Boolean onlyAvailable, String sort, Integer from, Integer size, String uri, String ip);
+                            Boolean onlyAvailable, String sort, Integer from, Integer size, HttpServletRequest request);
 
     List<Request> getRequestsForEventByInitiator(Long eventId, Long userId);
 

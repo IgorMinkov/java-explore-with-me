@@ -11,6 +11,8 @@ import ru.practicum.utils.enums.State;
 
 import java.time.LocalDateTime;
 
+import static ru.practicum.Utils.STATS_FORMATTER;
+
 @UtilityClass
 public class EventMapper {
 
@@ -19,7 +21,7 @@ public class EventMapper {
                 .annotation(eventNewDto.getAnnotation())
                 .title(eventNewDto.getTitle())
                 .description(eventNewDto.getDescription())
-                .eventDate(eventNewDto.getEventDate())
+                .eventDate(LocalDateTime.parse(eventNewDto.getEventDate(), STATS_FORMATTER))
                 .paid(eventNewDto.getPaid())
                 .participantLimit(eventNewDto.getParticipantLimit())
                 .requestModeration(eventNewDto.getRequestModeration())

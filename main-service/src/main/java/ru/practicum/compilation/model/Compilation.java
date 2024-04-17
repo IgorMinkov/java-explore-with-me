@@ -24,7 +24,7 @@ public class Compilation {
     @Column(name = "pinned")
     private Boolean pinned;
 
-    @Column(name = "title", nullable = false, unique = true, length = 63)
+    @Column(name = "title", nullable = false, unique = true, length = 50)
     private String title;
 
     @ManyToMany(fetch = FetchType.LAZY)

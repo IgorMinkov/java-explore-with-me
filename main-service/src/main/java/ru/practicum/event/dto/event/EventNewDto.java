@@ -1,24 +1,15 @@
 package ru.practicum.event.dto.event;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.practicum.event.dto.LocationDto;
 
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-
-import static ru.practicum.Utils.STATS_DATE_FORMAT;
 
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class EventNewDto {
 
     @NotBlank(message = "annotation cannot consist only of spaces")
@@ -33,9 +24,7 @@ public class EventNewDto {
     private String description;
 
     @NotNull
-    @FutureOrPresent(message = "event date must be today or in the future")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
-    private LocalDateTime eventDate;
+    private String eventDate;
 
     @NotNull(message = "location cannot be null")
     private LocationDto location;

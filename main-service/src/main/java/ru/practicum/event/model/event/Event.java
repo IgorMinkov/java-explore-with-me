@@ -1,6 +1,5 @@
 package ru.practicum.event.model.event;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.model.location.Location;
@@ -8,9 +7,8 @@ import ru.practicum.user.model.User;
 import ru.practicum.utils.enums.State;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-
-import static ru.practicum.Utils.STATS_DATE_FORMAT;
 
 @Data
 @Builder
@@ -42,17 +40,18 @@ public class Event {
     @EqualsAndHashCode.Exclude
     private Location location;
 
+    @Size(min = 20, max = 2000)
     @Column(name = "annotation", nullable = false)
     private String annotation;
 
-    @Column(name = "title", nullable = false, length = 127)
+    @Column(name = "title", nullable = false, length = 120)
     private String title;
 
+    @Size(min = 20, max = 7000)
     @Column(name = "description")
     private String description;
 
     @Column(name = "event_date", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime eventDate;
 
     @Column(name = "paid")
@@ -68,11 +67,9 @@ public class Event {
     private Boolean requestModeration;
 
     @Column(name = "published_on")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime publishedOn;
 
     @Column(name = "created_on")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = STATS_DATE_FORMAT)
     private LocalDateTime createdOn;
 
     @Enumerated(EnumType.STRING)

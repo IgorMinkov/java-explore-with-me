@@ -5,6 +5,7 @@ import lombok.Data;
 import ru.practicum.event.dto.LocationDto;
 import ru.practicum.utils.enums.StateAction;
 
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @Data
@@ -28,6 +29,7 @@ public class EventUpdateDto {
 
     private Boolean paid;
 
+    @PositiveOrZero
     private Long participantLimit;
 
     private Boolean requestModeration;

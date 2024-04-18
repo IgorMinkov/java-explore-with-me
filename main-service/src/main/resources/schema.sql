@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS events (
     description VARCHAR(7000) NOT NULL,
     confirmed_requests BIGINT,
     participant_limit BIGINT DEFAULT 0,
-    request_moderation BOOLEAN DEFAULT FALSE,
+    request_moderation BOOLEAN DEFAULT TRUE,
     published_on TIMESTAMP WITHOUT TIME ZONE,
     created_on TIMESTAMP WITHOUT TIME ZONE,
     state VARCHAR(63) NOT NULL,

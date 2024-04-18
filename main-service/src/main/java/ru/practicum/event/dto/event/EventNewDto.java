@@ -1,15 +1,20 @@
 package ru.practicum.event.dto.event;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.event.dto.LocationDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventNewDto {
 
     @NotBlank(message = "annotation cannot consist only of spaces")
@@ -32,6 +37,7 @@ public class EventNewDto {
     @Builder.Default
     private Boolean paid = false;
 
+    @PositiveOrZero
     @Builder.Default
     private Long participantLimit = 0L;
 

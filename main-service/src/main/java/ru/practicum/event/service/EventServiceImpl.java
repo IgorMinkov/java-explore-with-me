@@ -172,11 +172,11 @@ public class EventServiceImpl implements EventService {
 
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
-        if (!rangeStart.isBlank()) {
+        if (rangeStart != null) {
             startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
         }
-        if (!rangeEnd.isBlank()) {
-            endTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+        if (rangeEnd != null) {
+            endTime = LocalDateTime.parse(rangeEnd, STATS_FORMATTER);
         }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {

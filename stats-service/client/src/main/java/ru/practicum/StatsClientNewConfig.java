@@ -9,7 +9,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class StatsClientNewConfig {
 
-    private final String serverUrl = "http://stats-service:9090";
+    private final String serverUrl = "http://localhost:9090";
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {

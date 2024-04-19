@@ -7,7 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.StatisticClientNew;
+//import ru.practicum.StatisticClientNew;
+import ru.practicum.StatsClient;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
 //import ru.practicum.StatsClient;
@@ -21,7 +22,7 @@ import ru.practicum.event.model.location.Location;
 import ru.practicum.event.model.location.LocationMapper;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.repository.LocationRepository;
-import ru.practicum.event.service.statsRecorder.StatsRecordingService;
+//import ru.practicum.event.service.statsRecorder.StatsRecordingService;
 import ru.practicum.exception.DataNotFoundException;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.exception.ConflictException;
@@ -53,8 +54,8 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final CategoryService categoryService;
     private final EntityCheckService checkService;
-//    private final StatsClient statsClient;
-    private final StatsRecordingService statsClient;
+    private final StatsClient statsClient;
+//    private final StatsRecordingService statsClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -160,7 +161,7 @@ public class EventServiceImpl implements EventService {
             throw new DataNotFoundException(String.format("Запрашиваемое событие %s не опубликовано", eventId));
         }
         sendInfo(request);
-        event.setViews(getEventViewsById(event));
+        event.setViews(getEventViewsById(eventId));
         eventRepository.save(event);
         return event;
     }
@@ -189,7 +190,7 @@ public class EventServiceImpl implements EventService {
 
         sendInfo(request);
         for (Event event : events) {
-            event.setViews(getEventViewsById(event));
+            event.setViews(getEventViewsById(event.getId()));
             eventRepository.save(event);
         }
         return events;
@@ -283,10 +284,7 @@ public class EventServiceImpl implements EventService {
             event.setLocation(LocationMapper.toLocation(eventUpdateDto.getLocation()));
             locationRepository.save(event.getLocation());
         }
-        if (eventUpdateDto.getEventDate() != null) {
-            event.setEventDate(LocalDateTime.parse(eventUpdateDto.getEventDate(), STATS_FORMATTER));
-            locationRepository.save(event.getLocation());
-        }
+        Optional.ofNullable(eventUpdateDto.getEventDate()).ifPresent(event::setEventDate);
         Optional.ofNullable(eventUpdateDto.getPaid()).ifPresent(event::setPaid);
         Optional.ofNullable(eventUpdateDto.getParticipantLimit()).ifPresent(event::setParticipantLimit);
         Optional.ofNullable(eventUpdateDto.getRequestModeration()).ifPresent(event::setRequestModeration);
@@ -315,24 +313,11 @@ public class EventServiceImpl implements EventService {
         statsClient.addHit(hitDto);
     }
 
-//    private Long getEventViewsById(HttpServletRequest request) {
+    private Long getEventViewsById(Long eventId) {
 //        List<String> uri = List.of(request.getRequestURI());
-//        ResponseEntity<List<StatsDto>> response = statsClient.findStats(START_HISTORY, LocalDateTime.now(), uri, true);
-//        List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {});
-//
-//        if (result.isEmpty()) {
-//            return 0L;
-//        } else {
-//            return result.get(0).getHits();
-//        }
-//    }
-
-    private Long getEventViewsById(Event event) {
-        LocalDateTime start = event.getPublishedOn();
-        String uri = "/events/" + event.getId();
-        StatsParamsDto statsParamsDto = new StatsParamsDto(start, LocalDateTime.now(), List.of(uri), true);
-
-        List<StatsDto> result = statsClient.getStats(statsParamsDto);
+        String uri = "/events/" + eventId;
+        ResponseEntity<List<StatsDto>> response = statsClient.findStats(START_HISTORY, LocalDateTime.now(), uri, true);
+        List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {});
 
         if (result.isEmpty()) {
             return 0L;
@@ -340,5 +325,19 @@ public class EventServiceImpl implements EventService {
             return result.get(0).getHits();
         }
     }
+
+//    private Long getEventViewsById(Event event) {
+//        LocalDateTime start = event.getPublishedOn();
+//        String uri = "/events/" + event.getId();
+//        StatsParamsDto statsParamsDto = new StatsParamsDto(start, LocalDateTime.now(), List.of(uri), true);
+//
+//        List<StatsDto> result = statsClient.getStats(statsParamsDto);
+//
+//        if (result.isEmpty()) {
+//            return 0L;
+//        } else {
+//            return result.get(0).getHits();
+//        }
+//    }
 
 }

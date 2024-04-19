@@ -1,15 +1,16 @@
 package ru.practicum.event.dto.event;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.event.dto.LocationDto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.time.LocalDateTime;
+
+import static ru.practicum.Utils.DATE_FORMAT;
 
 @Data
 @Builder
@@ -28,8 +29,9 @@ public class EventNewDto {
     @Size(min = 20, max = 7000, message = "description must be greater than 20 and less than 7000")
     private String description;
 
-    @NotNull
-    private String eventDate;
+    @FutureOrPresent
+    @JsonFormat(pattern = DATE_FORMAT)
+    private LocalDateTime eventDate;
 
     @NotNull(message = "location cannot be null")
     private LocationDto location;

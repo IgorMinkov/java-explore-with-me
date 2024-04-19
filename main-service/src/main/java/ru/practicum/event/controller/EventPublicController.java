@@ -56,9 +56,6 @@ public class EventPublicController {
     @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
     public EventFullDto getEvent(@PathVariable Long id, HttpServletRequest request) {
-
-        String uri = request.getRequestURI();
-        String ip = request.getRemoteAddr();
         log.info("Получение события с id: {}", id);
         return EventMapper.toEventFullDto(eventService.getById(id, request));
     }

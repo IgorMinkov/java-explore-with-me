@@ -2,7 +2,6 @@ package ru.practicum.event.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import ru.practicum.category.service.CategoryService;
 //import ru.practicum.StatsClient;
 import ru.practicum.dto.HitDto;
 import ru.practicum.dto.StatsDto;
-import ru.practicum.dto.StatsParamsDto;
 import ru.practicum.event.dto.LocationDto;
 import ru.practicum.event.dto.event.EventUpdateDto;
 import ru.practicum.event.model.event.Event;
@@ -40,6 +38,7 @@ import ru.practicum.utils.enums.Status;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -132,10 +131,10 @@ public class EventServiceImpl implements EventService {
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
         if (!rangeStart.isBlank()) {
-            startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+            startTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
         if (!rangeEnd.isBlank()) {
-            endTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+            endTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {
@@ -162,7 +161,7 @@ public class EventServiceImpl implements EventService {
             throw new DataNotFoundException(String.format("Запрашиваемое событие %s не опубликовано", eventId));
         }
         sendInfo(request);
-        event.setViews(getEventViewsById(eventId));
+        event.setViews(getEventViewsById(event));
         eventRepository.save(event);
         return event;
     }
@@ -175,10 +174,10 @@ public class EventServiceImpl implements EventService {
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
         if (rangeStart != null) {
-            startTime = LocalDateTime.parse(rangeStart, STATS_FORMATTER);
+            startTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
         if (rangeEnd != null) {
-            endTime = LocalDateTime.parse(rangeEnd, STATS_FORMATTER);
+            endTime = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {
@@ -191,7 +190,7 @@ public class EventServiceImpl implements EventService {
 
         sendInfo(request);
         for (Event event : events) {
-            event.setViews(getEventViewsById(event.getId()));
+            event.setViews(getEventViewsById(event));
             eventRepository.save(event);
         }
         return events;
@@ -309,19 +308,20 @@ public class EventServiceImpl implements EventService {
                 .app("main-service")
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
-                .timestamp(LocalDateTime.now().toString())
+                .timestamp(LocalDateTime.now())
                 .build();
         statsClient.addHit(hitDto);
     }
 
-    private Long getEventViewsById(Long eventId) {
-//        List<String> uri = List.of(request.getRequestURI());
-        String uri = "/events/" + eventId;
-        ResponseEntity<List<StatsDto>> response = statsClient.findStats(START_HISTORY, LocalDateTime.now(), uri, true);
+    private Long getEventViewsById(Event event) {
+        LocalDateTime start = event.getPublishedOn();
+        String uri = "/events/" + event.getId();
+        ResponseEntity<List<StatsDto>> response = statsClient.findStats(start, LocalDateTime.now(),
+                List.of(uri), true);
         List<StatsDto> result = objectMapper.convertValue(response.getBody(), new TypeReference<>() {});
 
         if (result.isEmpty()) {
-            return 0L;
+            return 1L;
         } else {
             return result.get(0).getHits();
         }

@@ -11,6 +11,7 @@ import ru.practicum.service.HitService;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static ru.practicum.Utils.*;
@@ -35,8 +36,8 @@ public class HitController {
                                     @RequestParam String end,
                                     @RequestParam(required = false) List<String> uris,
                                     @RequestParam(defaultValue = "false") Boolean unique) {
-        LocalDateTime startTime = LocalDateTime.parse(start, STATS_FORMATTER);
-        LocalDateTime endTime = LocalDateTime.parse(end, STATS_FORMATTER);
+        LocalDateTime startTime = LocalDateTime.parse(start, DateTimeFormatter.ofPattern(DATE_FORMAT));
+        LocalDateTime endTime = LocalDateTime.parse(end, DateTimeFormatter.ofPattern(DATE_FORMAT));
 
         log.info("catch find stats request");
         return hitService.getStats(startTime, endTime, uris, unique);

@@ -11,6 +11,7 @@ import ru.practicum.dto.HitDto;
 import ru.practicum.dto.StatsDto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -33,10 +34,10 @@ public class StatsClient extends BaseClient {
         return post(HIT_PREFIX, hitDto);
     }
 
-    public ResponseEntity<List<StatsDto>> findStats(LocalDateTime start, LocalDateTime end, String uris, Boolean unique) {
+    public ResponseEntity<List<StatsDto>> findStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         Map<String, Object> parameters = Map.of(
-                "start", start.format(STATS_FORMATTER),
-                "end", end.format(STATS_FORMATTER),
+                "start", start.format(DateTimeFormatter.ofPattern(DATE_FORMAT)),
+                "end", end.format(DateTimeFormatter.ofPattern(DATE_FORMAT)),
                 "uris", uris,
                 "unique", unique
         );

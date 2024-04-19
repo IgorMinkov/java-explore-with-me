@@ -1,5 +1,6 @@
 package ru.practicum.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import java.time.LocalDateTime;
+
+import static ru.practicum.Utils.DATE_FORMAT;
 
 @Data
 @Builder
@@ -24,6 +29,7 @@ public class HitDto {
     private String ip;
 
     @NotNull(message = "timestamp cannot be null")
-    private String timestamp;
+    @JsonFormat(pattern = DATE_FORMAT)
+    private LocalDateTime timestamp;
 
 }

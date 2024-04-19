@@ -28,9 +28,6 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     @Transactional
     public Compilation create(Compilation compilation, Set<Long> eventIds) {
-        if (compilation.getPinned() == null) {
-            compilation.setPinned(false);
-        }
         if (eventIds == null || eventIds.isEmpty()) {
             compilation.setEvents(Collections.emptySet());
         } else {

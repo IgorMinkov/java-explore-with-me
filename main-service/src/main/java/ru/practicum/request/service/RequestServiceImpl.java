@@ -16,6 +16,7 @@ import ru.practicum.utils.enums.Status;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +33,10 @@ public class RequestServiceImpl implements RequestService {
         User user = checkService.getUserOrNotFound(userId);
         Event event = checkService.getEventOrNotFound(eventId);
 
-        if (event.getParticipantLimit() <= event.getConfirmedRequests() && event.getParticipantLimit() != 0) {
-            throw new ConflictException(String.format("Число запросов для события %s превысило лимит", event));
+        if (event.getParticipantLimit() != 0) {
+            if (Objects.equals(event.getConfirmedRequests(), event.getParticipantLimit())) {
+                throw new ConflictException(String.format("Число запросов для события %s превысило лимит", event));
+            }
         }
         if (event.getInitiator().getId().equals(userId)) {
             throw new ConflictException("Автору события не нужно подавать запрос на участие в нем");

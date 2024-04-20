@@ -7,11 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-//import ru.practicum.StatisticClientNew;
 import ru.practicum.StatsClient;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.service.CategoryService;
-//import ru.practicum.StatsClient;
 import ru.practicum.dto.HitDto;
 import ru.practicum.dto.StatsDto;
 import ru.practicum.event.dto.LocationDto;
@@ -21,7 +19,6 @@ import ru.practicum.event.model.location.Location;
 import ru.practicum.event.model.location.LocationMapper;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.event.repository.LocationRepository;
-//import ru.practicum.event.service.statsRecorder.StatsRecordingService;
 import ru.practicum.exception.DataNotFoundException;
 import ru.practicum.exception.ValidationException;
 import ru.practicum.exception.ConflictException;
@@ -55,7 +52,6 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
     private final EntityCheckService checkService;
     private final StatsClient statsClient;
-//    private final StatsRecordingService statsClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
@@ -130,11 +126,11 @@ public class EventServiceImpl implements EventService {
 
         LocalDateTime startTime = null;
         LocalDateTime endTime = null;
-        if (!rangeStart.isBlank()) {
+        if (rangeStart != null && !rangeStart.isBlank()) {
             startTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
-        if (!rangeEnd.isBlank()) {
-            endTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern(DATE_FORMAT));
+        if (rangeEnd != null && !rangeEnd.isBlank()) {
+            endTime = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern(DATE_FORMAT));
         }
         if (startTime != null && endTime != null) {
             if (startTime.isAfter(endTime)) {
@@ -314,7 +310,10 @@ public class EventServiceImpl implements EventService {
     }
 
     private Long getEventViewsById(Event event) {
-        LocalDateTime start = event.getPublishedOn();
+        LocalDateTime start = LocalDateTime.of(1970, 1, 1, 0, 0);
+        if (event.getPublishedOn() != null) {
+            start = event.getPublishedOn();
+        }
         String uri = "/events/" + event.getId();
         ResponseEntity<List<StatsDto>> response = statsClient.findStats(start, LocalDateTime.now(),
                 List.of(uri), true);
@@ -326,19 +325,5 @@ public class EventServiceImpl implements EventService {
             return result.get(0).getHits();
         }
     }
-
-//    private Long getEventViewsById(Event event) {
-//        LocalDateTime start = event.getPublishedOn();
-//        String uri = "/events/" + event.getId();
-//        StatsParamsDto statsParamsDto = new StatsParamsDto(start, LocalDateTime.now(), List.of(uri), true);
-//
-//        List<StatsDto> result = statsClient.getStats(statsParamsDto);
-//
-//        if (result.isEmpty()) {
-//            return 0L;
-//        } else {
-//            return result.get(0).getHits();
-//        }
-//    }
 
 }

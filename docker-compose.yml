@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  stats-service:
+  stats-server:
     build: stats-service/server
     image: stats-service
     container_name: stats-service
@@ -25,7 +25,7 @@ services:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=iamroot
 
-  main-service:
+  ewm-service:
     build: main-service
     image: main-service
     container_name: main-service
@@ -35,7 +35,7 @@ services:
       - ewm-db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main-db
-      - STATS_SERVER_URL=http://stats-service:9090
+      - STATS_SERVER_URL=http://stats-server:9090
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=iamroot
 

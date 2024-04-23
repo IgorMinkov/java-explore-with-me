@@ -17,6 +17,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -53,7 +54,7 @@ public class CommentPrivateController {
                                                  @RequestParam(required = false) String rangeEnd,
                                                  @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                  @Positive @RequestParam(defaultValue = "10") Integer size) {
-        List< Comment> result = commentService.getUserComments(userId, rangeStart, rangeEnd, from, size);
+        List<Comment> result = commentService.getUserComments(userId, rangeStart, rangeEnd, from, size);
         log.info("Получение комментариев пользователя с id: {}, с {} по {}", userId, rangeStart, rangeEnd);
         return result.stream()
                 .map(CommentMapper::toCommentShortDto)

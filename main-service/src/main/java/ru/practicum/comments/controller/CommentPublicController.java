@@ -29,7 +29,7 @@ public class CommentPublicController {
                                                   @RequestParam(required = false) String rangeEnd,
                                                   @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                                   @Positive @RequestParam(defaultValue = "10") Integer size) {
-        List< Comment> result = commentService.getEventComments(eventId, rangeStart, rangeEnd, from, size);
+        List<Comment> result = commentService.getEventComments(eventId, rangeStart, rangeEnd, from, size);
         log.info("Получение списка комментариев к событию с id: {} с {} по {}.", eventId, rangeStart, rangeEnd);
         return result.stream()
                 .map(CommentMapper::toCommentShortDto)
